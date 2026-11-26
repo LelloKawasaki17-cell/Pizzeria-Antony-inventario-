@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -445,11 +446,10 @@ footer{
 
     <input
       id="quantityInput"
-      type="number"
-      min="0"
-      max="300"
-      step="1"
-      inputmode="numeric"
+      type="text"
+      inputmode="decimal"
+      placeholder="0,0"
+      autocomplete="off"
     >
 
     <div class="modal-actions">
@@ -706,6 +706,13 @@ const search = document.getElementById("search");
 const overlay = document.getElementById("overlay");
 const input = document.getElementById("quantityInput");
 
+/* Format Italian decimal quantities */
+function formatQty(value) {
+  return Number(value).toLocaleString("it-IT", {
+    maximumFractionDigits: 3
+  });
+}
+
 function idFor(sec, name) {
   return sec + "::" + name;
 }
@@ -716,13 +723,15 @@ function getQty(sec, name) {
     : 0;
 }
 
+/* Save a final quantity, including decimal values */
 function setQty(sec, name, val) {
   const max = name === "Panetti pizza" ? 300 : 999999;
 
-  val = Math.max(
-    0,
-    Math.min(max, Math.floor(Number(val) || 0))
-  );
+  val = Number(String(val).replace(",", "."));
+
+  if (!Number.isFinite(val)) val = 0;
+
+  val = Math.max(0, Math.min(max, val));
 
   stock[idFor(sec, name)] = val;
 
@@ -764,11 +773,13 @@ function render() {
   document.getElementById("totalProducts").textContent =
     Object.values(inventory).reduce((a, v) => a + v.length, 0);
 
+  const total = Object.keys(stock).reduce(
+    (sum, k) => sum + (Number(stock[k]) || 0),
+    0
+  );
+
   document.getElementById("totalStock").textContent =
-    Object.keys(stock).reduce(
-      (sum, k) => sum + (Number(stock[k]) || 0),
-      0
-    );
+    formatQty(total);
 
   items.innerHTML = "";
 
@@ -796,7 +807,7 @@ function render() {
     q.className = "qty";
     q.type = "button";
     q.title = "Tocca per impostare la quantità definitiva";
-    q.textContent = qty;
+    q.textContent = formatQty(qty);
     q.setAttribute("aria-label", "Modifica quantità di " + name);
     q.onclick = () => openEdit(section, name, qty);
 
@@ -840,8 +851,7 @@ function openEdit(sec, name, qty) {
   document.getElementById("modalProduct").textContent =
     name + " · inserisci il numero definitivo presente.";
 
-  input.max = name === "Panetti pizza" ? "300" : "999999";
-  input.value = qty;
+  input.value = String(qty).replace(".", ",");
 
   overlay.classList.add("show");
 
@@ -856,6 +866,7 @@ function closeEdit() {
   editProduct = null;
 }
 
+/* Accept both comma and dot decimal separators */
 function saveEdit() {
   if (!editProduct) return;
 
@@ -863,23 +874,26 @@ function saveEdit() {
     ? 300
     : 999999;
 
-  const raw = input.value.trim();
+  const raw = input.value.trim().replace(",", ".");
 
   if (
     raw === "" ||
     !Number.isFinite(Number(raw)) ||
     Number(raw) < 0
   ) {
-    showToast("Inserisci un numero valido (0 o maggiore).");
+    showToast("Inserisci una quantità valida.");
     return;
   }
 
-  if (Number(raw) > max) {
+  const quantity = Number(raw);
+
+  if (quantity > max) {
     showToast("Il limite per questo prodotto è " + max + ".");
     return;
   }
 
-  setQty(editProduct.sec, editProduct.name, Number(raw));
+  setQty(editProduct.sec, editProduct.name, quantity);
+
   closeEdit();
 }
 
