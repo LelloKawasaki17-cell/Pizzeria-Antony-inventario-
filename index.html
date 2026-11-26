@@ -1,948 +1,775 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111214">
-<title>Inventario Pizzeria</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111">
+<title>Inventario Pizzeria da Antony</title>
 
 <style>
 :root{
-  --bg:#101113;
-  --panel:#1a1b1f;
-  --gold:#e5b85c;
-  --red:#d94b3d;
-  --text:#f6f3ed;
-  --muted:#a9a7a2;
-  --line:#33343a;
+--bg:#111;
+--card:#202020;
+--gold:#e8c36c;
+--line:#393939
 }
-
 *{box-sizing:border-box}
-
 body{
-  margin:0;
-  background:radial-gradient(ellipse at top,#252326 0%,var(--bg) 55%);
-  color:var(--text);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  min-height:100vh;
+margin:0;
+background:radial-gradient(ellipse at top,#2b251a,#111 55%);
+color:#f7f7f7;
+font-family:system-ui,-apple-system,"Segoe UI",sans-serif
 }
-
 header{
-  padding:26px 18px 18px;
-  max-width:1100px;
-  margin:auto;
+text-align:center;
+padding:25px 16px 18px
 }
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
+header small{
+color:var(--gold);
+letter-spacing:4px;
+font-weight:800
 }
-
-.logo{
-  width:54px;
-  height:54px;
-  border-radius:16px;
-  background:linear-gradient(145deg,#f0c86c,#b87b2b);
-  display:grid;
-  place-items:center;
-  font-size:28px;
-  box-shadow:0 8px 26px #0006;
-}
-
 h1{
-  font-size:clamp(25px,5vw,36px);
-  margin:0;
-  font-weight:850;
-  letter-spacing:-.8px;
+margin:7px 0;
+font-size:clamp(26px,6vw,36px)
 }
-
-.subtitle{
-  color:var(--muted);
-  margin:5px 0 0;
-  font-size:13px;
+header p{
+margin:0;
+color:#aaa;
+font-size:13px
 }
-
 main{
-  max-width:1100px;
-  margin:auto;
-  padding:0 18px 40px;
+max-width:950px;
+margin:auto;
+padding:8px 15px 40px
 }
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin:18px 0;
+.sub{
+color:#aaa;
+text-transform:uppercase;
+letter-spacing:2px;
+font-size:12px;
+margin:12px 4px
 }
-
-.stat{
-  background:linear-gradient(145deg,#222328,#17181b);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:14px;
+.cards{
+display:grid;
+gap:14px
 }
-
-.stat strong{
-  display:block;
-  color:var(--gold);
-  font-size:22px;
+.section{
+position:relative;
+isolation:isolate;
+overflow:hidden;
+min-height:155px;
+border-radius:20px;
+border:1px solid #49402e;
+background:#222;
+color:white;
+text-align:left;
+padding:24px;
+cursor:pointer;
+transition:.18s
 }
-
-.stat span{
-  font-size:11px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.7px;
+.section:active{transform:scale(.985)}
+.section:before{
+content:"";
+position:absolute;
+inset:0;
+z-index:-2;
+background:var(--img) center right/cover no-repeat;
+opacity:.9
 }
-
+.section:after{
+content:"";
+position:absolute;
+inset:0;
+z-index:-1;
+background:linear-gradient(
+90deg,
+#191919 0%,
+#191919 20%,
+rgba(25,25,25,.92) 38%,
+rgba(25,25,25,.55) 62%,
+rgba(25,25,25,.08)
+)
+}
+.sectxt{max-width:72%}
+.emoji{font-size:23px}
+.sectname{
+display:block;
+color:#f6d88e;
+font-size:clamp(21px,5vw,28px);
+font-weight:900;
+letter-spacing:1.5px;
+margin:7px 0
+}
+.desc{
+font-size:12px;
+color:#ddd
+}
+.arrow{
+position:absolute;
+right:20px;
+top:50%;
+transform:translateY(-50%);
+font-size:28px;
+color:var(--gold)
+}
+.back{
+border:0;
+background:none;
+color:var(--gold);
+font-weight:800;
+padding:10px 0;
+cursor:pointer
+}
+.heading{
+display:flex;
+align-items:center;
+gap:12px;
+margin:8px 0 15px
+}
+.heading h2{
+margin:0;
+color:#f6d88e;
+font-size:25px
+}
+.heading p{
+margin:3px 0;
+color:#aaa;
+font-size:12px
+}
 .tools{
-  display:flex;
-  gap:10px;
-  margin:18px 0 14px;
+display:flex;
+gap:9px;
+margin:16px 0 12px
 }
-
-.search{
-  flex:1;
-  min-width:0;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:14px 15px;
-  color:var(--text);
-  font-size:15px;
-  outline:none;
+.tools input{
+flex:1;
+min-width:0;
+background:#1c1c1c;
+border:1px solid #444;
+color:white;
+border-radius:12px;
+padding:13px;
+font-size:15px
 }
-
-.search:focus{border-color:var(--gold)}
-
-.reset{
-  border:1px solid #55332e;
-  background:#2b1d1b;
-  color:#ffb1a6;
-  border-radius:14px;
-  padding:0 14px;
-  font-weight:700;
-  cursor:pointer;
+.btn{
+border:1px solid #66512e;
+background:#2c261c;
+color:#f6d88e;
+border-radius:12px;
+padding:12px;
+font-weight:700;
+cursor:pointer
 }
-
-.tabs{
-  display:flex;
-  gap:8px;
-  overflow:auto;
-  padding:2px 0 12px;
-  scrollbar-width:none;
+.danger{
+color:#ffb5a9;
+border-color:#653a35;
+background:#2a1c1a
 }
-
-.tab{
-  white-space:nowrap;
-  border:1px solid var(--line);
-  background:#191a1e;
-  color:var(--muted);
-  padding:11px 16px;
-  border-radius:12px;
-  font-weight:750;
-  cursor:pointer;
+.stats{
+display:flex;
+justify-content:space-between;
+color:#aaa;
+font-size:12px;
+margin:10px 2px 14px
 }
-
-.tab.active{
-  background:var(--gold);
-  color:#21180a;
-  border-color:var(--gold);
+.list{
+display:grid;
+gap:9px
 }
-
-.section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin:14px 0 12px;
+.product{
+display:flex;
+align-items:center;
+gap:9px;
+background:linear-gradient(145deg,#242424,#191919);
+border:1px solid #333;
+border-radius:14px;
+padding:11px 12px;
+min-height:62px
 }
-
-.section-title h2{
-  margin:0;
-  font-size:21px;
+.name{
+flex:1;
+min-width:0;
+font-size:14px;
+font-weight:650;
+overflow-wrap:anywhere
 }
-
-.section-title small{color:var(--muted)}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-}
-
-.item{
-  background:linear-gradient(145deg,#202126,#18191c);
-  border:1px solid #303137;
-  border-radius:16px;
-  padding:14px;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  transition:border .15s;
-}
-
-.item.special{
-  border-color:#795a2a;
-  background:linear-gradient(145deg,#2a241b,#19191b);
-}
-
-.item-name{
-  font-weight:700;
-  font-size:14px;
-  line-height:1.35;
-  overflow-wrap:anywhere;
-}
-
-.quantity-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-}
-
 .qty{
-  font-size:26px;
-  font-weight:850;
-  color:var(--gold);
-  font-variant-numeric:tabular-nums;
-  cursor:pointer;
-  border:0;
-  background:transparent;
-  padding:0;
-  min-width:32px;
-  text-align:left;
+color:#f6d88e;
+font-weight:850;
+font-size:17px;
+min-width:30px;
+text-align:center;
+cursor:pointer;
+padding:5px;
+font-variant-numeric:tabular-nums
 }
-
-.qty:focus{
-  outline:2px solid var(--gold);
-  border-radius:6px;
-}
-
-.controls{
-  display:flex;
-  gap:7px;
-}
-
 .step{
-  width:36px;
-  height:36px;
-  border-radius:11px;
-  border:1px solid #414147;
-  background:#2a2b31;
-  color:white;
-  font-size:21px;
-  font-weight:700;
-  cursor:pointer;
+width:34px;
+height:34px;
+border-radius:10px;
+border:1px solid #444;
+background:#303030;
+color:white;
+font-size:20px;
+cursor:pointer
 }
-
-.step.plus{
-  background:var(--red);
-  border-color:var(--red);
+.plus{
+background:#3a3020;
+color:#f6d88e;
+border-color:#6b542d
 }
-
-.step:active{transform:scale(.96)}
-
-.step:disabled{
-  opacity:.35;
-  cursor:not-allowed;
-}
-
-.unit{
-  font-size:10px;
-  color:var(--muted);
-  margin-left:4px;
-}
-
 .empty{
-  padding:36px 15px;
-  text-align:center;
-  color:var(--muted);
-  border:1px dashed var(--line);
-  border-radius:16px;
+text-align:center;
+color:#aaa;
+padding:25px
 }
-
-footer{
-  text-align:center;
-  color:#777;
-  padding:22px 10px;
-  font-size:12px;
+.modalbg{
+position:fixed;
+inset:0;
+background:#000b;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:18px;
+z-index:5
 }
-
-.overlay{
-  position:fixed;
-  inset:0;
-  background:#000b;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:5;
-}
-
-.overlay.show{display:flex}
-
 .modal{
-  width:min(100%,360px);
-  background:#202126;
-  border:1px solid #49464a;
-  border-radius:22px;
-  padding:22px;
-  box-shadow:0 25px 80px #0009;
+width:min(390px,100%);
+background:#222;
+border:1px solid #59472c;
+border-radius:20px;
+padding:22px
 }
-
 .modal h3{
-  margin:0 0 6px;
-  font-size:20px;
+margin:0 0 5px;
+color:#f6d88e
 }
-
 .modal p{
-  margin:0 0 18px;
-  color:var(--muted);
-  font-size:13px;
+margin:0 0 15px;
+color:#aaa;
+font-size:13px
 }
-
 .modal input{
-  width:100%;
-  background:#111215;
-  border:1px solid #4a4741;
-  border-radius:13px;
-  padding:16px;
-  color:white;
-  font-size:24px;
-  font-weight:800;
-  outline:none;
+width:100%;
+padding:14px;
+border:1px solid #4b4b4b;
+border-radius:12px;
+background:#111;
+color:white;
+font-size:24px;
+text-align:center
 }
-
-.modal input:focus{border-color:var(--gold)}
-
-.modal-actions{
-  display:flex;
-  gap:9px;
-  margin-top:14px;
+.actions{
+display:flex;
+gap:10px;
+margin-top:15px
 }
-
-.modal-actions button{
-  flex:1;
-  border:0;
-  border-radius:12px;
-  padding:13px;
-  font-weight:800;
-  cursor:pointer;
+.actions button{flex:1}
+footer{
+text-align:center;
+color:#666;
+font-size:11px;
+padding:24px 0
 }
-
-.cancel{
-  background:#33343a;
-  color:white;
-}
-
-.save{
-  background:var(--gold);
-  color:#21180a;
-}
-
-.toast{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#292a2f;
-  border:1px solid #555;
-  color:white;
-  padding:11px 16px;
-  border-radius:12px;
-  display:none;
-  z-index:8;
-  font-size:13px;
-}
-
-@media(min-width:720px){
-  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .stats{max-width:560px}
-  .item{padding:16px}
-}
-
-@media(max-width:420px){
-  header{padding-top:20px}
-  .stats{gap:7px}
-  .stat{padding:11px}
-  .stat strong{font-size:19px}
-  .stat span{font-size:9px}
-  .grid{gap:8px}
-  .item{padding:12px}
-  .item-name{font-size:13px}
-  .step{width:33px;height:33px}
-  .qty{font-size:24px}
-  .reset{font-size:12px;padding:0 10px}
+@media(min-width:650px){
+.cards{grid-template-columns:1fr 1fr}
+.section{min-height:175px}
+.list{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 
 <body>
-
 <header>
-  <div class="brand">
-    <div class="logo">🍕</div>
-    <div>
-      <h1>Inventario Pizzeria</h1>
-      <p class="subtitle">Il magazzino, sempre sotto controllo.</p>
-    </div>
-  </div>
+<small>PIZZERIA DA ANTONY</small>
+<h1>Inventario</h1>
+<p>Gestione semplice e veloce del magazzino</p>
 </header>
 
-<main>
-
-  <div class="stats">
-    <div class="stat">
-      <strong id="totalProducts">0</strong>
-      <span>Prodotti</span>
-    </div>
-
-    <div class="stat">
-      <strong id="totalStock">0</strong>
-      <span>Pezzi in stock</span>
-    </div>
-
-    <div class="stat">
-      <strong id="activeSection">Sala</strong>
-      <span>Sezione attiva</span>
-    </div>
-  </div>
-
-  <div class="tools">
-    <input
-      id="search"
-      class="search"
-      type="search"
-      placeholder="🔎 Cerca un prodotto..."
-      autocomplete="off"
-    >
-
-    <button class="reset" id="resetBtn">Azzera</button>
-  </div>
-
-  <nav class="tabs" id="tabs"></nav>
-
-  <div class="section-title">
-    <h2 id="sectionHeading">Sala</h2>
-    <small id="countLabel"></small>
-  </div>
-
-  <div class="grid" id="items"></div>
-
-  <footer>Inventario Pizzeria · Versione iniziale</footer>
-
-</main>
-
-<div class="overlay" id="overlay" role="dialog" aria-modal="true">
-  <div class="modal">
-    <h3 id="modalTitle">Modifica quantità</h3>
-
-    <p id="modalProduct">
-      Inserisci la quantità definitiva presente in magazzino.
-    </p>
-
-    <input
-      id="quantityInput"
-      type="text"
-      inputmode="decimal"
-      placeholder="0,0"
-      autocomplete="off"
-    >
-
-    <div class="modal-actions">
-      <button class="cancel" id="cancelBtn">Annulla</button>
-      <button class="save" id="saveBtn">Imposta quantità</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
+<main id="app"></main>
 
 <script>
 const inventory = {
-  "Sala": [
-    "Coca-Cola",
-    "Coca-Cola Zero",
-    "Coca-Cola da litro",
-    "Fanta",
-    "Sprite",
-    "Acqua naturale",
-    "Acqua frizzante",
-    "Tennen’s",
-    "Franziskaner media",
-    "Ichnusa",
-    "Bud",
-    "Leffe rossa",
-    "Leffe bionda",
-    "Stella Artois da 66",
-    "Nastro Azzurro da 66",
-    "Limoncello",
-    "Meloncello",
-    "Uniqum",
-    "Petrus",
-    "Amaro Montenegro",
-    "Amaro Averna",
-    "Amaro della casa",
-    "Jegermaister",
-    "Grappa barricata",
-    "Grappa bianca",
-    "Caffè",
-    "Kit caffè",
-    "Maionese bustine",
-    "Ketchup bustine",
-    "Sale bustine",
-    "Aceto balsamico bustine",
-    "Olio d’oliva bustine",
-    "Olio piccante",
-    "Porta posate",
-    "Bicchieri monouso",
-    "Tovaglioli bianchi",
-    "Aceto",
-    "Microfibra per bicchieri",
-    "Vetril",
-    "Viakal",
-    "Ters",
-    "Carta igienica",
-    "Detersivo per pavimenti",
-    "Sapone per le mani",
-    "Comande",
-    "Scontrini grandi",
-    "Scontrini piccoli"
-  ],
+"Sala": [
+"Coca-Cola",
+"Coca-Cola Zero",
+"Coca-Cola da litro",
+"Fanta",
+"Sprite",
+"Acqua naturale",
+"Acqua frizzante",
+"Tennen’s",
+"Franziskaner media",
+"Ichnusa",
+"Bud",
+"Leffe rossa",
+"Leffe bionda",
+"Stella Artois da 66",
+"Nastro Azzurro da 66",
+"Limoncello",
+"Meloncello",
+"Uniqum",
+"Petrus",
+"Amaro Montenegro",
+"Amaro Averna",
+"Amaro della casa",
+"Jegermaister",
+"Grappa barricata",
+"Grappa bianca",
+"Caffè",
+"Kit caffè",
+"Maionese bustine",
+"Ketchup bustine",
+"Sale bustine",
+"Aceto balsamico bustine",
+"Olio d’oliva bustine",
+"Olio piccante",
+"Porta posate",
+"Bicchieri monouso",
+"Tovaglioli bianchi",
+"Aceto",
+"Microfibra per bicchieri",
+"Vetril",
+"Viakal",
+"Ters",
+"Carta igienica",
+"Detersivo per pavimenti",
+"Sapone per le mani",
+"Comande",
+"Scontrini grandi",
+"Scontrini piccoli",
+"Vino bianco Falanghina",
+"Vino bianco Fiano",
+"Vino rosso Aglianico",
+"Vino rosso Coda di Volpe"
+],
 
-  "Pizzeria": [
-    "Lardo di colonnata",
-    "Salame piccante",
-    "Salame dolce",
-    "Cotto",
-    "Funghi champignon",
-    "Carciofini",
-    "Provola",
-    "Pancetta",
-    "Fiordilatte",
-    "Melanzane",
-    "Peperoni",
-    "Zucchine",
-    "Salsiccia",
-    "Porcini",
-    "Olive nere",
-    "Nduja",
-    "Mozzarella a fette",
-    "Pelati",
-    "Gorgonzola",
-    "Parmigiano",
-    "Emmental",
-    "Insalata",
-    "Rucola",
-    "Pomodorini",
-    "Pomodorini rossi semi dry",
-    "Pomodorini verdi semi dry",
-    "Pomodorini gialli semi dry",
-    "Datterino giallo in succo",
-    "Datterino rosso in succo",
-    "Gamberetti",
-    "Crudo",
-    "Mortadella",
-    "Speck",
-    "Pesto di basilico",
-    "Pesto di pistacchio",
-    "Ricotta",
-    "Pepe",
-    "Origano",
-    "Olio",
-    "Farina 25 kg",
-    "Semola rimacinata",
-    "Glassa di aceto balsamico",
-    "Lievito",
-    "Tartufo",
-    "Peperone crusco",
-    "Sugo cotto",
-    "Lesse",
-    "Patata viola",
-    "Sale",
-    "Rotoloni",
-    "Maionese",
-    "Ketchup",
-    "BBQ",
-    "Cheddar",
-    "Tonno",
-    "Mais",
-    "Alici",
-    "Basilico",
-    "Noci",
-    "Taralli",
-    "Panna",
-    "Cipolla",
-    "Cipolla caramellata",
-    "Cartoni pizza normali",
-    "Cartoni mezzo metro",
-    "Legna",
-    "Pellicola",
-    "Pomodori secchi",
-    "Panetti pizza",
-    "Peperoncino in foglie",
-    "Pecorino",
-    "Porchetta",
-    "Zucca",
-    "Broccoli",
-    "Fiori di zucca",
-    "Capperi",
-    "Caciocavallo"
-  ],
+"Pizzeria": [
+"Lardo di colonnata",
+"Salame piccante",
+"Salame dolce",
+"Cotto",
+"Funghi champignon",
+"Carciofini",
+"Provola",
+"Pancetta",
+"Fiordilatte",
+"Melanzane",
+"Peperoni",
+"Zucchine",
+"Salsiccia",
+"Porcini",
+"Olive nere",
+"Nduja",
+"Mozzarella a fette",
+"Pelati",
+"Gorgonzola",
+"Parmigiano",
+"Emmental",
+"Insalata",
+"Rucola",
+"Pomodorini",
+"Pomodorini rossi semi dry",
+"Pomodorini verdi semi dry",
+"Pomodorini gialli semi dry",
+"Datterino giallo in succo",
+"Datterino rosso in succo",
+"Gamberetti",
+"Crudo",
+"Mortadella",
+"Speck",
+"Pesto di basilico",
+"Pesto di pistacchio",
+"Ricotta",
+"Pepe",
+"Origano",
+"Olio",
+"Farina 25 kg",
+"Semola rimacinata",
+"Glassa di aceto balsamico",
+"Lievito",
+"Tartufo",
+"Peperone crusco",
+"Sugo cotto",
+"Lesse",
+"Patata viola",
+"Sale",
+"Rotoloni",
+"Maionese",
+"Ketchup",
+"BBQ",
+"Cheddar",
+"Tonno",
+"Mais",
+"Alici",
+"Basilico",
+"Noci",
+"Taralli",
+"Panna",
+"Cipolla",
+"Cipolla caramellata",
+"Cartoni pizza normali",
+"Cartoni mezzo metro",
+"Legna",
+"Pellicola",
+"Pomodori secchi",
+"Panetti pizza",
+"Peperoncino in foglie",
+"Pecorino",
+"Porchetta",
+"Zucca",
+"Broccoli",
+"Fiori di zucca",
+"Capperi",
+"Caciocavallo"
+],
 
-  "Cucina": [
-    "Impasto polpette",
-    "Tagliata",
-    "Patatine",
-    "Patatine a barchetta",
-    "Patatine twister",
-    "Cotolette",
-    "Petto di pollo",
-    "Ghiaccio",
-    "Kebab",
-    "Panna",
-    "Pecorino",
-    "Grana",
-    "Pelati",
-    "Pomodorini",
-    "Pesto di pistacchio",
-    "Mozzarella di bufala",
-    "Pepe",
-    "Sale",
-    "Olio",
-    "Erbe aromatiche",
-    "Basilico",
-    "Cotto",
-    "Crudo",
-    "Spianata piccante",
-    "Pancetta",
-    "Speck",
-    "Mortadella",
-    "Uova",
-    "Mascarpone",
-    "Melanzane",
-    "Zucchine",
-    "Salsiccia",
-    "Insalata",
-    "Rucola",
-    "Mais",
-    "Olive",
-    "Carciofi",
-    "Burrate",
-    "Millefoglie",
-    "Savoiardi",
-    "Cacao",
-    "Zucchero a velo",
-    "Miele",
-    "Noci",
-    "Formaggi taglieri",
-    "No lattosio",
-    "Ricotta",
-    "Latte",
-    "Burro",
-    "Farina per la cucina",
-    "Cheddar",
-    "Bucatini",
-    "Piselli",
-    "Riso",
-    "Patate",
-    "Pangrattato",
-    "Nutella",
-    "Pistacchio crema",
-    "Cioccolato bianco",
-    "Caramello",
-    "Amarene",
-    "Zucchero pacco",
-    "Olio friggitrice",
-    "Carta per fritti",
-    "Carta forno",
-    "Carta argentata",
-    "Pellicola",
-    "Vaschette grandi",
-    "Vaschette piccole",
-    "Broccoli",
-    "Zucca",
-    "Cipolla",
-    "Aglio",
-    "Pennette",
-    "Cioccolato fondente",
-    "Gas"
-  ],
+"Cucina": [
+"Impasto polpette",
+"Tagliata",
+"Patatine",
+"Patatine a barchetta",
+"Patatine twister",
+"Cotolette",
+"Petto di pollo",
+"Ghiaccio",
+"Kebab",
+"Panna",
+"Pecorino",
+"Grana",
+"Pelati",
+"Pomodorini",
+"Pesto di pistacchio",
+"Mozzarella di bufala",
+"Pepe",
+"Sale",
+"Olio",
+"Erbe aromatiche",
+"Basilico",
+"Cotto",
+"Crudo",
+"Spianata piccante",
+"Pancetta",
+"Speck",
+"Mortadella",
+"Uova",
+"Mascarpone",
+"Melanzane",
+"Zucchine",
+"Salsiccia",
+"Insalata",
+"Rucola",
+"Mais",
+"Olive",
+"Carciofi",
+"Burrate",
+"Millefoglie",
+"Savoiardi",
+"Cacao",
+"Zucchero a velo",
+"Miele",
+"Noci",
+"Formaggi taglieri",
+"No lattosio",
+"Ricotta",
+"Latte",
+"Burro",
+"Farina per la cucina",
+"Cheddar",
+"Bucatini",
+"Piselli",
+"Riso",
+"Patate",
+"Pangrattato",
+"Nutella",
+"Pistacchio crema",
+"Cioccolato bianco",
+"Caramello",
+"Amarene",
+"Zucchero pacco",
+"Olio friggitrice",
+"Carta per fritti",
+"Carta forno",
+"Carta argentata",
+"Pellicola",
+"Vaschette grandi",
+"Vaschette piccole",
+"Broccoli",
+"Zucca",
+"Cipolla",
+"Aglio",
+"Pennette",
+"Cioccolato fondente",
+"Gas"
+],
 
-  "Lavaggio": [
-    "Candeggina",
-    "Sgrassatore",
-    "Ters",
-    "Pezze Banchi",
-    "Pezze pavimento",
-    "Pezze per asciugare",
-    "Buste grandi",
-    "Buste piccole",
-    "Svelto",
-    "Detersivo lavastoviglie",
-    "Brillantante"
-  ]
+"Lavaggio": [
+"Candeggina",
+"Sgrassatore",
+"Ters",
+"Pezze Banchi",
+"Pezze pavimento",
+"Pezze per asciugare",
+"Buste grandi",
+"Buste piccole",
+"Svelto",
+"Detersivo lavastoviglie",
+"Brillantante"
+]
 };
 
-const KEY = "inventario-pizzeria-v1";
-
-let section = "Sala";
-let query = "";
-let editProduct = null;
+const key = "inventario-pizzeria-v1";
 let stock = {};
 
 try {
-  stock = JSON.parse(localStorage.getItem(KEY) || "{}");
+stock = JSON.parse(localStorage.getItem(key) || "{}");
 } catch(e) {
-  stock = {};
+stock = {};
 }
 
-const tabs = document.getElementById("tabs");
-const items = document.getElementById("items");
-const search = document.getElementById("search");
-const overlay = document.getElementById("overlay");
-const input = document.getElementById("quantityInput");
+let current = null;
+let term = "";
+const app = document.getElementById("app");
 
-/* Format Italian decimal quantities */
-function formatQty(value) {
-  return Number(value).toLocaleString("it-IT", {
-    maximumFractionDigits: 3
-  });
-}
-
-function idFor(sec, name) {
-  return sec + "::" + name;
-}
-
-function getQty(sec, name) {
-  return Number.isFinite(stock[idFor(sec, name)])
-    ? stock[idFor(sec, name)]
-    : 0;
-}
-
-/* Save a final quantity, including decimal values */
-function setQty(sec, name, val) {
-  const max = name === "Panetti pizza" ? 300 : 999999;
-
-  val = Number(String(val).replace(",", "."));
-
-  if (!Number.isFinite(val)) val = 0;
-
-  val = Math.max(0, Math.min(max, val));
-
-  stock[idFor(sec, name)] = val;
-
-  localStorage.setItem(KEY, JSON.stringify(stock));
-
-  render();
-}
-
-function renderTabs() {
-  tabs.innerHTML = "";
-
-  Object.keys(inventory).forEach(sec => {
-    const b = document.createElement("button");
-
-    b.className = "tab" + (sec === section ? " active" : "");
-    b.textContent = sec;
-
-    b.onclick = () => {
-      section = sec;
-      renderTabs();
-      render();
-    };
-
-    tabs.appendChild(b);
-  });
-}
-
-function render() {
-  document.getElementById("activeSection").textContent = section;
-  document.getElementById("sectionHeading").textContent = section;
-
-  const filtered = inventory[section].filter(n =>
-    n.toLowerCase().includes(query.toLowerCase())
-  );
-
-  document.getElementById("countLabel").textContent =
-    filtered.length + " prodotti";
-
-  document.getElementById("totalProducts").textContent =
-    Object.values(inventory).reduce((a, v) => a + v.length, 0);
-
-  const total = Object.keys(stock).reduce(
-    (sum, k) => sum + (Number(stock[k]) || 0),
-    0
-  );
-
-  document.getElementById("totalStock").textContent =
-    formatQty(total);
-
-  items.innerHTML = "";
-
-  if (!filtered.length) {
-    items.innerHTML =
-      '<div class="empty">Nessun prodotto trovato.</div>';
-    return;
-  }
-
-  filtered.forEach(name => {
-    const qty = getQty(section, name);
-    const special = name === "Panetti pizza";
-
-    const card = document.createElement("article");
-    card.className = "item" + (special ? " special" : "");
-
-    const title = document.createElement("div");
-    title.className = "item-name";
-    title.textContent = name + (special ? " · max 300" : "");
-
-    const row = document.createElement("div");
-    row.className = "quantity-row";
-
-    const q = document.createElement("button");
-    q.className = "qty";
-    q.type = "button";
-    q.title = "Tocca per impostare la quantità definitiva";
-    q.textContent = formatQty(qty);
-    q.setAttribute("aria-label", "Modifica quantità di " + name);
-    q.onclick = () => openEdit(section, name, qty);
-
-    const unit = document.createElement("span");
-    unit.className = "unit";
-    unit.textContent = "unità";
-
-    const left = document.createElement("div");
-    left.append(q, unit);
-
-    const controls = document.createElement("div");
-    controls.className = "controls";
-
-    const minus = document.createElement("button");
-    minus.className = "step";
-    minus.textContent = "−";
-    minus.title = "Diminuisci di 1";
-    minus.onclick = () => setQty(section, name, qty - 1);
-    minus.disabled = qty <= 0;
-
-    const plus = document.createElement("button");
-    plus.className = "step plus";
-    plus.textContent = "+";
-    plus.title = "Aumenta di 1";
-    plus.onclick = () => setQty(section, name, qty + 1);
-    plus.disabled = special && qty >= 300;
-
-    controls.append(minus, plus);
-    row.append(left, controls);
-    card.append(title, row);
-    items.appendChild(card);
-  });
-}
-
-function openEdit(sec, name, qty) {
-  editProduct = { sec, name };
-
-  document.getElementById("modalTitle").textContent =
-    "Modifica quantità";
-
-  document.getElementById("modalProduct").textContent =
-    name + " · inserisci il numero definitivo presente.";
-
-  input.value = String(qty).replace(".", ",");
-
-  overlay.classList.add("show");
-
-  setTimeout(() => {
-    input.focus();
-    input.select();
-  }, 50);
-}
-
-function closeEdit() {
-  overlay.classList.remove("show");
-  editProduct = null;
-}
-
-/* Accept both comma and dot decimal separators */
-function saveEdit() {
-  if (!editProduct) return;
-
-  const max = editProduct.name === "Panetti pizza"
-    ? 300
-    : 999999;
-
-  const raw = input.value.trim().replace(",", ".");
-
-  if (
-    raw === "" ||
-    !Number.isFinite(Number(raw)) ||
-    Number(raw) < 0
-  ) {
-    showToast("Inserisci una quantità valida.");
-    return;
-  }
-
-  const quantity = Number(raw);
-
-  if (quantity > max) {
-    showToast("Il limite per questo prodotto è " + max + ".");
-    return;
-  }
-
-  setQty(editProduct.sec, editProduct.name, quantity);
-
-  closeEdit();
-}
-
-document.getElementById("cancelBtn").onclick = closeEdit;
-document.getElementById("saveBtn").onclick = saveEdit;
-
-input.addEventListener("keydown", e => {
-  if (e.key === "Enter") saveEdit();
-  if (e.key === "Escape") closeEdit();
-});
-
-overlay.addEventListener("click", e => {
-  if (e.target === overlay) closeEdit();
-});
-
-search.addEventListener("input", () => {
-  query = search.value;
-  render();
-});
-
-document.getElementById("resetBtn").onclick = () => {
-  if (
-    confirm("Vuoi azzerare tutte le quantità salvate su questo dispositivo?")
-  ) {
-    stock = {};
-    localStorage.removeItem(KEY);
-    render();
-    showToast("Quantità azzerate.");
-  }
+const meta = {
+Sala: [
+"🍷",
+"Bevande, materiali e prodotti sala",
+"https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1400&q=85"
+],
+Pizzeria: [
+"🍕",
+"Ingredienti, impasti e prodotti pizza",
+"https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=1400&q=85"
+],
+Cucina: [
+"👨‍🍳",
+"Ingredienti e prodotti cucina",
+"https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1400&q=85"
+],
+Lavaggio: [
+"🧽",
+"Detergenti e materiali di pulizia",
+"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1400&q=85"
+]
 };
 
-let toastTimer;
-
-function showToast(msg) {
-  const t = document.getElementById("toast");
-
-  t.textContent = msg;
-  t.style.display = "block";
-
-  clearTimeout(toastTimer);
-
-  toastTimer = setTimeout(() => {
-    t.style.display = "none";
-  }, 2200);
+function save(){
+localStorage.setItem(key,JSON.stringify(stock));
 }
 
-renderTabs();
-render();
-</script>
+function q(n){
+return Number(stock[n] || 0);
+}
 
+function fmt(n){
+return Number(n).toLocaleString("it-IT",{
+maximumFractionDigits:3
+});
+}
+
+function home(){
+current = null;
+
+app.innerHTML =
+'<div class="sub">Scegli un reparto</div>' +
+'<div class="cards">' +
+Object.keys(inventory).map(n=>{
+let m = meta[n];
+
+return `
+<button class="section"
+style="--img:url('${m[2]}')"
+onclick="openSection('${n}')">
+
+<span class="sectxt">
+<span class="emoji">${m[0]}</span>
+<span class="sectname">${n.toUpperCase()}</span>
+<span class="desc">${m[1]}</span>
+</span>
+
+<span class="arrow">›</span>
+</button>
+`;
+}).join("") +
+'</div><footer>Inventario • Pizzeria da Antony</footer>';
+}
+
+function openSection(n){
+current = n;
+term = "";
+section();
+}
+
+function section(){
+let m = meta[current];
+
+let items = inventory[current].filter(x =>
+x.toLowerCase().includes(term.toLowerCase())
+);
+
+let total = inventory[current].reduce((a,x)=>a+q(x),0);
+
+app.innerHTML = `
+<button class="back" onclick="home()">‹ Tutte le sezioni</button>
+
+<div class="heading">
+<span class="emoji">${m[0]}</span>
+<div>
+<h2>${current}</h2>
+<p>${m[1]}</p>
+</div>
+</div>
+
+<div class="tools">
+<input id="search"
+placeholder="Cerca prodotto..."
+value="${esc(term)}"
+oninput="term=this.value;sectionKeep(this.value)">
+
+<button class="btn danger" onclick="resetSection()">Azzera</button>
+</div>
+
+<div class="stats">
+<span>${items.length} prodotti</span>
+<span>Totale quantità: ${fmt(total)}</span>
+</div>
+
+<div class="list">
+${items.length
+? items.map(item=>product(item)).join("")
+: '<div class="empty">Nessun prodotto trovato</div>'}
+</div>
+
+<footer>Quantità salvate automaticamente su questo dispositivo.</footer>
+`;
+}
+
+function sectionKeep(){
+let el = document.getElementById("search");
+let p = el.selectionStart;
+
+section();
+
+el = document.getElementById("search");
+el.focus();
+el.setSelectionRange(p,p);
+}
+
+function product(n){
+return `
+<div class="product">
+<div class="name">${esc(n)}</div>
+
+<button class="step" onclick="change('${js(n)}',-1)">−</button>
+
+<div class="qty" onclick="edit('${js(n)}')">
+${fmt(q(n))}
+</div>
+
+<button class="step plus" onclick="change('${js(n)}',1)">+</button>
+</div>
+`;
+}
+
+function change(n,d){
+let v = Math.max(0,q(n)+d);
+
+if(n === "Panetti pizza"){
+v = Math.min(300,v);
+}
+
+stock[n] = v;
+save();
+section();
+}
+
+function edit(n){
+let bg = document.createElement("div");
+bg.className = "modalbg";
+
+bg.innerHTML = `
+<div class="modal">
+<h3>${esc(n)}</h3>
+<p>Inserisci la quantità attuale</p>
+
+<input id="qty"
+inputmode="decimal"
+type="text"
+value="${fmt(q(n))}"
+placeholder="0,0">
+
+<div class="actions">
+<button class="btn" id="cancel">Annulla</button>
+<button class="btn" id="ok">Salva</button>
+</div>
+</div>
+`;
+
+document.body.appendChild(bg);
+
+let input = bg.querySelector("#qty");
+input.focus();
+input.select();
+
+let close = ()=>bg.remove();
+
+bg.querySelector("#cancel").onclick = close;
+
+bg.onclick = e=>{
+if(e.target === bg) close();
+};
+
+function submit(){
+let raw = input.value.trim().replace(",",".");
+let v = Number(raw);
+
+if(!raw || !Number.isFinite(v) || v < 0){
+input.focus();
+return;
+}
+
+v = Math.min(n === "Panetti pizza" ? 300 : 999999,v);
+
+stock[n] = v;
+save();
+close();
+section();
+}
+
+bg.querySelector("#ok").onclick = submit;
+
+input.onkeydown = e=>{
+if(e.key === "Enter") submit();
+if(e.key === "Escape") close();
+};
+}
+
+function resetSection(){
+if(!confirm("Vuoi azzerare tutte le quantità della sezione "+current+"?"))return;
+
+inventory[current].forEach(n=>stock[n]=0);
+save();
+section();
+}
+
+function esc(s){
+return String(s).replace(/[&<>"']/g,c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[c]));
+}
+
+function js(s){
+return String(s).replaceAll("\\","\\\\").replaceAll("'","\\'");
+}
+
+home();
+</script>
 </body>
 </html>
