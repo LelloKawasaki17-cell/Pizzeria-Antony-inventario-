@@ -1,1 +1,934 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111214">
+<title>Inventario Pizzeria</title>
 
+<style>
+:root{
+  --bg:#101113;
+  --panel:#1a1b1f;
+  --gold:#e5b85c;
+  --red:#d94b3d;
+  --text:#f6f3ed;
+  --muted:#a9a7a2;
+  --line:#33343a;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:radial-gradient(ellipse at top,#252326 0%,var(--bg) 55%);
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+}
+
+header{
+  padding:26px 18px 18px;
+  max-width:1100px;
+  margin:auto;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.logo{
+  width:54px;
+  height:54px;
+  border-radius:16px;
+  background:linear-gradient(145deg,#f0c86c,#b87b2b);
+  display:grid;
+  place-items:center;
+  font-size:28px;
+  box-shadow:0 8px 26px #0006;
+}
+
+h1{
+  font-size:clamp(25px,5vw,36px);
+  margin:0;
+  font-weight:850;
+  letter-spacing:-.8px;
+}
+
+.subtitle{
+  color:var(--muted);
+  margin:5px 0 0;
+  font-size:13px;
+}
+
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:0 18px 40px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:18px 0;
+}
+
+.stat{
+  background:linear-gradient(145deg,#222328,#17181b);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+}
+
+.stat strong{
+  display:block;
+  color:var(--gold);
+  font-size:22px;
+}
+
+.stat span{
+  font-size:11px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.tools{
+  display:flex;
+  gap:10px;
+  margin:18px 0 14px;
+}
+
+.search{
+  flex:1;
+  min-width:0;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px 15px;
+  color:var(--text);
+  font-size:15px;
+  outline:none;
+}
+
+.search:focus{border-color:var(--gold)}
+
+.reset{
+  border:1px solid #55332e;
+  background:#2b1d1b;
+  color:#ffb1a6;
+  border-radius:14px;
+  padding:0 14px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  padding:2px 0 12px;
+  scrollbar-width:none;
+}
+
+.tab{
+  white-space:nowrap;
+  border:1px solid var(--line);
+  background:#191a1e;
+  color:var(--muted);
+  padding:11px 16px;
+  border-radius:12px;
+  font-weight:750;
+  cursor:pointer;
+}
+
+.tab.active{
+  background:var(--gold);
+  color:#21180a;
+  border-color:var(--gold);
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:14px 0 12px;
+}
+
+.section-title h2{
+  margin:0;
+  font-size:21px;
+}
+
+.section-title small{color:var(--muted)}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.item{
+  background:linear-gradient(145deg,#202126,#18191c);
+  border:1px solid #303137;
+  border-radius:16px;
+  padding:14px;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  transition:border .15s;
+}
+
+.item.special{
+  border-color:#795a2a;
+  background:linear-gradient(145deg,#2a241b,#19191b);
+}
+
+.item-name{
+  font-weight:700;
+  font-size:14px;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+
+.quantity-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.qty{
+  font-size:26px;
+  font-weight:850;
+  color:var(--gold);
+  font-variant-numeric:tabular-nums;
+  cursor:pointer;
+  border:0;
+  background:transparent;
+  padding:0;
+  min-width:32px;
+  text-align:left;
+}
+
+.qty:focus{
+  outline:2px solid var(--gold);
+  border-radius:6px;
+}
+
+.controls{
+  display:flex;
+  gap:7px;
+}
+
+.step{
+  width:36px;
+  height:36px;
+  border-radius:11px;
+  border:1px solid #414147;
+  background:#2a2b31;
+  color:white;
+  font-size:21px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.step.plus{
+  background:var(--red);
+  border-color:var(--red);
+}
+
+.step:active{transform:scale(.96)}
+
+.step:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+.unit{
+  font-size:10px;
+  color:var(--muted);
+  margin-left:4px;
+}
+
+.empty{
+  padding:36px 15px;
+  text-align:center;
+  color:var(--muted);
+  border:1px dashed var(--line);
+  border-radius:16px;
+}
+
+footer{
+  text-align:center;
+  color:#777;
+  padding:22px 10px;
+  font-size:12px;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:#000b;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:5;
+}
+
+.overlay.show{display:flex}
+
+.modal{
+  width:min(100%,360px);
+  background:#202126;
+  border:1px solid #49464a;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 25px 80px #0009;
+}
+
+.modal h3{
+  margin:0 0 6px;
+  font-size:20px;
+}
+
+.modal p{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.modal input{
+  width:100%;
+  background:#111215;
+  border:1px solid #4a4741;
+  border-radius:13px;
+  padding:16px;
+  color:white;
+  font-size:24px;
+  font-weight:800;
+  outline:none;
+}
+
+.modal input:focus{border-color:var(--gold)}
+
+.modal-actions{
+  display:flex;
+  gap:9px;
+  margin-top:14px;
+}
+
+.modal-actions button{
+  flex:1;
+  border:0;
+  border-radius:12px;
+  padding:13px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.cancel{
+  background:#33343a;
+  color:white;
+}
+
+.save{
+  background:var(--gold);
+  color:#21180a;
+}
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#292a2f;
+  border:1px solid #555;
+  color:white;
+  padding:11px 16px;
+  border-radius:12px;
+  display:none;
+  z-index:8;
+  font-size:13px;
+}
+
+@media(min-width:720px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .stats{max-width:560px}
+  .item{padding:16px}
+}
+
+@media(max-width:420px){
+  header{padding-top:20px}
+  .stats{gap:7px}
+  .stat{padding:11px}
+  .stat strong{font-size:19px}
+  .stat span{font-size:9px}
+  .grid{gap:8px}
+  .item{padding:12px}
+  .item-name{font-size:13px}
+  .step{width:33px;height:33px}
+  .qty{font-size:24px}
+  .reset{font-size:12px;padding:0 10px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">🍕</div>
+    <div>
+      <h1>Inventario Pizzeria</h1>
+      <p class="subtitle">Il magazzino, sempre sotto controllo.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="stats">
+    <div class="stat">
+      <strong id="totalProducts">0</strong>
+      <span>Prodotti</span>
+    </div>
+
+    <div class="stat">
+      <strong id="totalStock">0</strong>
+      <span>Pezzi in stock</span>
+    </div>
+
+    <div class="stat">
+      <strong id="activeSection">Sala</strong>
+      <span>Sezione attiva</span>
+    </div>
+  </div>
+
+  <div class="tools">
+    <input
+      id="search"
+      class="search"
+      type="search"
+      placeholder="🔎 Cerca un prodotto..."
+      autocomplete="off"
+    >
+
+    <button class="reset" id="resetBtn">Azzera</button>
+  </div>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <div class="section-title">
+    <h2 id="sectionHeading">Sala</h2>
+    <small id="countLabel"></small>
+  </div>
+
+  <div class="grid" id="items"></div>
+
+  <footer>Inventario Pizzeria · Versione iniziale</footer>
+
+</main>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <h3 id="modalTitle">Modifica quantità</h3>
+
+    <p id="modalProduct">
+      Inserisci la quantità definitiva presente in magazzino.
+    </p>
+
+    <input
+      id="quantityInput"
+      type="number"
+      min="0"
+      max="300"
+      step="1"
+      inputmode="numeric"
+    >
+
+    <div class="modal-actions">
+      <button class="cancel" id="cancelBtn">Annulla</button>
+      <button class="save" id="saveBtn">Imposta quantità</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const inventory = {
+  "Sala": [
+    "Coca-Cola",
+    "Coca-Cola Zero",
+    "Coca-Cola da litro",
+    "Fanta",
+    "Sprite",
+    "Acqua naturale",
+    "Acqua frizzante",
+    "Tennen’s",
+    "Franziskaner media",
+    "Ichnusa",
+    "Bud",
+    "Leffe rossa",
+    "Leffe bionda",
+    "Stella Artois da 66",
+    "Nastro Azzurro da 66",
+    "Limoncello",
+    "Meloncello",
+    "Uniqum",
+    "Petrus",
+    "Amaro Montenegro",
+    "Amaro Averna",
+    "Amaro della casa",
+    "Jegermaister",
+    "Grappa barricata",
+    "Grappa bianca",
+    "Caffè",
+    "Kit caffè",
+    "Maionese bustine",
+    "Ketchup bustine",
+    "Sale bustine",
+    "Aceto balsamico bustine",
+    "Olio d’oliva bustine",
+    "Olio piccante",
+    "Porta posate",
+    "Bicchieri monouso",
+    "Tovaglioli bianchi",
+    "Aceto",
+    "Microfibra per bicchieri",
+    "Vetril",
+    "Viakal",
+    "Ters",
+    "Carta igienica",
+    "Detersivo per pavimenti",
+    "Sapone per le mani",
+    "Comande",
+    "Scontrini grandi",
+    "Scontrini piccoli"
+  ],
+
+  "Pizzeria": [
+    "Lardo di colonnata",
+    "Salame piccante",
+    "Salame dolce",
+    "Cotto",
+    "Funghi champignon",
+    "Carciofini",
+    "Provola",
+    "Pancetta",
+    "Fiordilatte",
+    "Melanzane",
+    "Peperoni",
+    "Zucchine",
+    "Salsiccia",
+    "Porcini",
+    "Olive nere",
+    "Nduja",
+    "Mozzarella a fette",
+    "Pelati",
+    "Gorgonzola",
+    "Parmigiano",
+    "Emmental",
+    "Insalata",
+    "Rucola",
+    "Pomodorini",
+    "Pomodorini rossi semi dry",
+    "Pomodorini verdi semi dry",
+    "Pomodorini gialli semi dry",
+    "Datterino giallo in succo",
+    "Datterino rosso in succo",
+    "Gamberetti",
+    "Crudo",
+    "Mortadella",
+    "Speck",
+    "Pesto di basilico",
+    "Pesto di pistacchio",
+    "Ricotta",
+    "Pepe",
+    "Origano",
+    "Olio",
+    "Farina 25 kg",
+    "Semola rimacinata",
+    "Glassa di aceto balsamico",
+    "Lievito",
+    "Tartufo",
+    "Peperone crusco",
+    "Sugo cotto",
+    "Lesse",
+    "Patata viola",
+    "Sale",
+    "Rotoloni",
+    "Maionese",
+    "Ketchup",
+    "BBQ",
+    "Cheddar",
+    "Tonno",
+    "Mais",
+    "Alici",
+    "Basilico",
+    "Noci",
+    "Taralli",
+    "Panna",
+    "Cipolla",
+    "Cipolla caramellata",
+    "Cartoni pizza normali",
+    "Cartoni mezzo metro",
+    "Legna",
+    "Pellicola",
+    "Pomodori secchi",
+    "Panetti pizza",
+    "Peperoncino in foglie",
+    "Pecorino",
+    "Porchetta",
+    "Zucca",
+    "Broccoli",
+    "Fiori di zucca",
+    "Capperi",
+    "Caciocavallo"
+  ],
+
+  "Cucina": [
+    "Impasto polpette",
+    "Tagliata",
+    "Patatine",
+    "Patatine a barchetta",
+    "Patatine twister",
+    "Cotolette",
+    "Petto di pollo",
+    "Ghiaccio",
+    "Kebab",
+    "Panna",
+    "Pecorino",
+    "Grana",
+    "Pelati",
+    "Pomodorini",
+    "Pesto di pistacchio",
+    "Mozzarella di bufala",
+    "Pepe",
+    "Sale",
+    "Olio",
+    "Erbe aromatiche",
+    "Basilico",
+    "Cotto",
+    "Crudo",
+    "Spianata piccante",
+    "Pancetta",
+    "Speck",
+    "Mortadella",
+    "Uova",
+    "Mascarpone",
+    "Melanzane",
+    "Zucchine",
+    "Salsiccia",
+    "Insalata",
+    "Rucola",
+    "Mais",
+    "Olive",
+    "Carciofi",
+    "Burrate",
+    "Millefoglie",
+    "Savoiardi",
+    "Cacao",
+    "Zucchero a velo",
+    "Miele",
+    "Noci",
+    "Formaggi taglieri",
+    "No lattosio",
+    "Ricotta",
+    "Latte",
+    "Burro",
+    "Farina per la cucina",
+    "Cheddar",
+    "Bucatini",
+    "Piselli",
+    "Riso",
+    "Patate",
+    "Pangrattato",
+    "Nutella",
+    "Pistacchio crema",
+    "Cioccolato bianco",
+    "Caramello",
+    "Amarene",
+    "Zucchero pacco",
+    "Olio friggitrice",
+    "Carta per fritti",
+    "Carta forno",
+    "Carta argentata",
+    "Pellicola",
+    "Vaschette grandi",
+    "Vaschette piccole",
+    "Broccoli",
+    "Zucca",
+    "Cipolla",
+    "Aglio",
+    "Pennette",
+    "Cioccolato fondente",
+    "Gas"
+  ],
+
+  "Lavaggio": [
+    "Candeggina",
+    "Sgrassatore",
+    "Ters",
+    "Pezze Banchi",
+    "Pezze pavimento",
+    "Pezze per asciugare",
+    "Buste grandi",
+    "Buste piccole",
+    "Svelto",
+    "Detersivo lavastoviglie",
+    "Brillantante"
+  ]
+};
+
+const KEY = "inventario-pizzeria-v1";
+
+let section = "Sala";
+let query = "";
+let editProduct = null;
+let stock = {};
+
+try {
+  stock = JSON.parse(localStorage.getItem(KEY) || "{}");
+} catch(e) {
+  stock = {};
+}
+
+const tabs = document.getElementById("tabs");
+const items = document.getElementById("items");
+const search = document.getElementById("search");
+const overlay = document.getElementById("overlay");
+const input = document.getElementById("quantityInput");
+
+function idFor(sec, name) {
+  return sec + "::" + name;
+}
+
+function getQty(sec, name) {
+  return Number.isFinite(stock[idFor(sec, name)])
+    ? stock[idFor(sec, name)]
+    : 0;
+}
+
+function setQty(sec, name, val) {
+  const max = name === "Panetti pizza" ? 300 : 999999;
+
+  val = Math.max(
+    0,
+    Math.min(max, Math.floor(Number(val) || 0))
+  );
+
+  stock[idFor(sec, name)] = val;
+
+  localStorage.setItem(KEY, JSON.stringify(stock));
+
+  render();
+}
+
+function renderTabs() {
+  tabs.innerHTML = "";
+
+  Object.keys(inventory).forEach(sec => {
+    const b = document.createElement("button");
+
+    b.className = "tab" + (sec === section ? " active" : "");
+    b.textContent = sec;
+
+    b.onclick = () => {
+      section = sec;
+      renderTabs();
+      render();
+    };
+
+    tabs.appendChild(b);
+  });
+}
+
+function render() {
+  document.getElementById("activeSection").textContent = section;
+  document.getElementById("sectionHeading").textContent = section;
+
+  const filtered = inventory[section].filter(n =>
+    n.toLowerCase().includes(query.toLowerCase())
+  );
+
+  document.getElementById("countLabel").textContent =
+    filtered.length + " prodotti";
+
+  document.getElementById("totalProducts").textContent =
+    Object.values(inventory).reduce((a, v) => a + v.length, 0);
+
+  document.getElementById("totalStock").textContent =
+    Object.keys(stock).reduce(
+      (sum, k) => sum + (Number(stock[k]) || 0),
+      0
+    );
+
+  items.innerHTML = "";
+
+  if (!filtered.length) {
+    items.innerHTML =
+      '<div class="empty">Nessun prodotto trovato.</div>';
+    return;
+  }
+
+  filtered.forEach(name => {
+    const qty = getQty(section, name);
+    const special = name === "Panetti pizza";
+
+    const card = document.createElement("article");
+    card.className = "item" + (special ? " special" : "");
+
+    const title = document.createElement("div");
+    title.className = "item-name";
+    title.textContent = name + (special ? " · max 300" : "");
+
+    const row = document.createElement("div");
+    row.className = "quantity-row";
+
+    const q = document.createElement("button");
+    q.className = "qty";
+    q.type = "button";
+    q.title = "Tocca per impostare la quantità definitiva";
+    q.textContent = qty;
+    q.setAttribute("aria-label", "Modifica quantità di " + name);
+    q.onclick = () => openEdit(section, name, qty);
+
+    const unit = document.createElement("span");
+    unit.className = "unit";
+    unit.textContent = "unità";
+
+    const left = document.createElement("div");
+    left.append(q, unit);
+
+    const controls = document.createElement("div");
+    controls.className = "controls";
+
+    const minus = document.createElement("button");
+    minus.className = "step";
+    minus.textContent = "−";
+    minus.title = "Diminuisci di 1";
+    minus.onclick = () => setQty(section, name, qty - 1);
+    minus.disabled = qty <= 0;
+
+    const plus = document.createElement("button");
+    plus.className = "step plus";
+    plus.textContent = "+";
+    plus.title = "Aumenta di 1";
+    plus.onclick = () => setQty(section, name, qty + 1);
+    plus.disabled = special && qty >= 300;
+
+    controls.append(minus, plus);
+    row.append(left, controls);
+    card.append(title, row);
+    items.appendChild(card);
+  });
+}
+
+function openEdit(sec, name, qty) {
+  editProduct = { sec, name };
+
+  document.getElementById("modalTitle").textContent =
+    "Modifica quantità";
+
+  document.getElementById("modalProduct").textContent =
+    name + " · inserisci il numero definitivo presente.";
+
+  input.max = name === "Panetti pizza" ? "300" : "999999";
+  input.value = qty;
+
+  overlay.classList.add("show");
+
+  setTimeout(() => {
+    input.focus();
+    input.select();
+  }, 50);
+}
+
+function closeEdit() {
+  overlay.classList.remove("show");
+  editProduct = null;
+}
+
+function saveEdit() {
+  if (!editProduct) return;
+
+  const max = editProduct.name === "Panetti pizza"
+    ? 300
+    : 999999;
+
+  const raw = input.value.trim();
+
+  if (
+    raw === "" ||
+    !Number.isFinite(Number(raw)) ||
+    Number(raw) < 0
+  ) {
+    showToast("Inserisci un numero valido (0 o maggiore).");
+    return;
+  }
+
+  if (Number(raw) > max) {
+    showToast("Il limite per questo prodotto è " + max + ".");
+    return;
+  }
+
+  setQty(editProduct.sec, editProduct.name, Number(raw));
+  closeEdit();
+}
+
+document.getElementById("cancelBtn").onclick = closeEdit;
+document.getElementById("saveBtn").onclick = saveEdit;
+
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") saveEdit();
+  if (e.key === "Escape") closeEdit();
+});
+
+overlay.addEventListener("click", e => {
+  if (e.target === overlay) closeEdit();
+});
+
+search.addEventListener("input", () => {
+  query = search.value;
+  render();
+});
+
+document.getElementById("resetBtn").onclick = () => {
+  if (
+    confirm("Vuoi azzerare tutte le quantità salvate su questo dispositivo?")
+  ) {
+    stock = {};
+    localStorage.removeItem(KEY);
+    render();
+    showToast("Quantità azzerate.");
+  }
+};
+
+let toastTimer;
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+
+  t.textContent = msg;
+  t.style.display = "block";
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => {
+    t.style.display = "none";
+  }, 2200);
+}
+
+renderTabs();
+render();
+</script>
+
+</body>
+</html>
