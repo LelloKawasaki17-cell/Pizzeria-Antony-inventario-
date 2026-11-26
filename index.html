@@ -1,291 +1,271 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111">
-<title>Inventario Pizzeria da Antony</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111111">
+<title>Antony Dash - Inventario</title>
 
 <style>
 :root{
---bg:#111;
---card:#202020;
---gold:#e8c36c;
---line:#393939
+  --bg:#111111;
+  --card:#202020;
+  --gold:#e8c36c;
+  --line:#393939;
 }
 *{box-sizing:border-box}
 body{
-margin:0;
-background:radial-gradient(ellipse at top,#2b251a,#111 55%);
-color:#f7f7f7;
-font-family:system-ui,-apple-system,"Segoe UI",sans-serif
+  margin:0;
+  background:radial-gradient(ellipse at top,#2b251a,#111 55%);
+  color:#f7f7f7;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 header{
-text-align:center;
-padding:25px 16px 18px
+  text-align:center;
+  padding:25px 16px 18px;
 }
 header small{
-color:var(--gold);
-letter-spacing:4px;
-font-weight:800
+  color:var(--gold);
+  letter-spacing:4px;
+  font-weight:800;
 }
 h1{
-margin:7px 0;
-font-size:clamp(26px,6vw,36px)
+  margin:7px 0;
+  font-size:clamp(26px,6vw,36px);
 }
 header p{
-margin:0;
-color:#aaa;
-font-size:13px
+  margin:0;
+  color:#aaa;
+  font-size:13px;
 }
 main{
-max-width:950px;
-margin:auto;
-padding:8px 15px 40px
+  max-width:950px;
+  margin:auto;
+  padding:8px 15px 40px;
 }
 .sub{
-color:#aaa;
-text-transform:uppercase;
-letter-spacing:2px;
-font-size:12px;
-margin:12px 4px
+  color:#aaa;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-size:12px;
+  margin:12px 4px;
 }
-.cards{
-display:grid;
-gap:14px
-}
+.cards{display:grid;gap:14px}
 .section{
-position:relative;
-isolation:isolate;
-overflow:hidden;
-min-height:155px;
-border-radius:20px;
-border:1px solid #49402e;
-background:#222;
-color:white;
-text-align:left;
-padding:24px;
-cursor:pointer;
-transition:.18s
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:155px;
+  border-radius:20px;
+  border:1px solid #49402e;
+  background:#222;
+  color:white;
+  text-align:left;
+  padding:24px;
+  cursor:pointer;
+  transition:.18s;
 }
 .section:active{transform:scale(.985)}
 .section:before{
-content:"";
-position:absolute;
-inset:0;
-z-index:-2;
-background:var(--img) center right/cover no-repeat;
-opacity:.9
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  background:var(--img) center right/cover no-repeat;
+  opacity:.9;
 }
 .section:after{
-content:"";
-position:absolute;
-inset:0;
-z-index:-1;
-background:linear-gradient(
-90deg,
-#191919 0%,
-#191919 20%,
-rgba(25,25,25,.92) 38%,
-rgba(25,25,25,.55) 62%,
-rgba(25,25,25,.08)
-)
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:linear-gradient(90deg,#191919 0%,#191919 20%,rgba(25,25,25,.92) 38%,rgba(25,25,25,.55) 62%,rgba(25,25,25,.08));
 }
 .sectxt{max-width:72%}
 .emoji{font-size:23px}
 .sectname{
-display:block;
-color:#f6d88e;
-font-size:clamp(21px,5vw,28px);
-font-weight:900;
-letter-spacing:1.5px;
-margin:7px 0
+  display:block;
+  color:#f6d88e;
+  font-size:clamp(21px,5vw,28px);
+  font-weight:900;
+  letter-spacing:1.5px;
+  margin:7px 0;
 }
-.desc{
-font-size:12px;
-color:#ddd
-}
+.desc{font-size:12px;color:#ddd}
 .arrow{
-position:absolute;
-right:20px;
-top:50%;
-transform:translateY(-50%);
-font-size:28px;
-color:var(--gold)
+  position:absolute;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:28px;
+  color:var(--gold);
 }
 .back{
-border:0;
-background:none;
-color:var(--gold);
-font-weight:800;
-padding:10px 0;
-cursor:pointer
+  border:0;
+  background:none;
+  color:var(--gold);
+  font-weight:800;
+  padding:10px 0;
+  cursor:pointer;
 }
 .heading{
-display:flex;
-align-items:center;
-gap:12px;
-margin:8px 0 15px
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:8px 0 15px;
 }
 .heading h2{
-margin:0;
-color:#f6d88e;
-font-size:25px
+  margin:0;
+  color:#f6d88e;
+  font-size:25px;
 }
 .heading p{
-margin:3px 0;
-color:#aaa;
-font-size:12px
+  margin:3px 0;
+  color:#aaa;
+  font-size:12px;
 }
 .tools{
-display:flex;
-gap:9px;
-margin:16px 0 12px
+  display:flex;
+  gap:9px;
+  margin:16px 0 12px;
 }
 .tools input{
-flex:1;
-min-width:0;
-background:#1c1c1c;
-border:1px solid #444;
-color:white;
-border-radius:12px;
-padding:13px;
-font-size:15px
+  flex:1;
+  min-width:0;
+  background:#1c1c1c;
+  border:1px solid #444;
+  color:white;
+  border-radius:12px;
+  padding:13px;
+  font-size:15px;
 }
 .btn{
-border:1px solid #66512e;
-background:#2c261c;
-color:#f6d88e;
-border-radius:12px;
-padding:12px;
-font-weight:700;
-cursor:pointer
+  border:1px solid #66512e;
+  background:#2c261c;
+  color:#f6d88e;
+  border-radius:12px;
+  padding:12px;
+  font-weight:700;
+  cursor:pointer;
 }
 .danger{
-color:#ffb5a9;
-border-color:#653a35;
-background:#2a1c1a
+  color:#ffb5a9;
+  border-color:#653a35;
+  background:#2a1c1a;
 }
 .stats{
-display:flex;
-justify-content:space-between;
-color:#aaa;
-font-size:12px;
-margin:10px 2px 14px
+  display:flex;
+  justify-content:space-between;
+  color:#aaa;
+  font-size:12px;
+  margin:10px 2px 14px;
+  gap:10px;
 }
-.list{
-display:grid;
-gap:9px
-}
+.list{display:grid;gap:9px}
 .product{
-display:flex;
-align-items:center;
-gap:9px;
-background:linear-gradient(145deg,#242424,#191919);
-border:1px solid #333;
-border-radius:14px;
-padding:11px 12px;
-min-height:62px
+  display:flex;
+  align-items:center;
+  gap:9px;
+  background:linear-gradient(145deg,#242424,#191919);
+  border:1px solid #333;
+  border-radius:14px;
+  padding:11px 12px;
+  min-height:62px;
 }
 .name{
-flex:1;
-min-width:0;
-font-size:14px;
-font-weight:650;
-overflow-wrap:anywhere
+  flex:1;
+  min-width:0;
+  font-size:14px;
+  font-weight:650;
+  overflow-wrap:anywhere;
 }
 .qty{
-color:#f6d88e;
-font-weight:850;
-font-size:17px;
-min-width:30px;
-text-align:center;
-cursor:pointer;
-padding:5px;
-font-variant-numeric:tabular-nums
+  color:#f6d88e;
+  font-weight:850;
+  font-size:17px;
+  min-width:30px;
+  text-align:center;
+  cursor:pointer;
+  padding:5px;
+  font-variant-numeric:tabular-nums;
+}
+.unit{
+  color:#999;
+  font-size:11px;
+  min-width:48px;
+  text-align:right;
 }
 .step{
-width:34px;
-height:34px;
-border-radius:10px;
-border:1px solid #444;
-background:#303030;
-color:white;
-font-size:20px;
-cursor:pointer
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  border:1px solid #444;
+  background:#303030;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
 }
 .plus{
-background:#3a3020;
-color:#f6d88e;
-border-color:#6b542d
+  background:#3a3020;
+  color:#f6d88e;
+  border-color:#6b542d;
 }
 .empty{
-text-align:center;
-color:#aaa;
-padding:25px
+  text-align:center;
+  color:#aaa;
+  padding:25px;
 }
 .modalbg{
-position:fixed;
-inset:0;
-background:#000b;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:18px;
-z-index:5
+  position:fixed;
+  inset:0;
+  background:#000b;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:5;
 }
 .modal{
-width:min(390px,100%);
-background:#222;
-border:1px solid #59472c;
-border-radius:20px;
-padding:22px
+  width:min(390px,100%);
+  background:#222;
+  border:1px solid #59472c;
+  border-radius:20px;
+  padding:22px;
 }
-.modal h3{
-margin:0 0 5px;
-color:#f6d88e
-}
-.modal p{
-margin:0 0 15px;
-color:#aaa;
-font-size:13px
-}
+.modal h3{margin:0 0 5px;color:#f6d88e}
+.modal p{margin:0 0 15px;color:#aaa;font-size:13px}
 .modal input{
-width:100%;
-padding:14px;
-border:1px solid #4b4b4b;
-border-radius:12px;
-background:#111;
-color:white;
-font-size:24px;
-text-align:center
+  width:100%;
+  padding:14px;
+  border:1px solid #4b4b4b;
+  border-radius:12px;
+  background:#111;
+  color:white;
+  font-size:24px;
+  text-align:center;
 }
-.actions{
-display:flex;
-gap:10px;
-margin-top:15px
-}
+.actions{display:flex;gap:10px;margin-top:15px}
 .actions button{flex:1}
 footer{
-text-align:center;
-color:#666;
-font-size:11px;
-padding:24px 0
+  text-align:center;
+  color:#666;
+  font-size:11px;
+  padding:24px 0;
 }
 @media(min-width:650px){
-.cards{grid-template-columns:1fr 1fr}
-.section{min-height:175px}
-.list{grid-template-columns:1fr 1fr}
+  .cards{grid-template-columns:1fr 1fr}
+  .section{min-height:175px}
+  .list{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 
 <body>
 <header>
-<small>PIZZERIA DA ANTONY</small>
-<h1>Inventario</h1>
-<p>Gestione semplice e veloce del magazzino</p>
+  <small>PIZZERIA DA ANTONY</small>
+  <h1>Antony Dash</h1>
+  <p>Gestione semplice e veloce del magazzino</p>
 </header>
 
 <main id="app"></main>
@@ -347,426 +327,388 @@ const inventory = {
 ],
 
 "Pizzeria": [
-"Lardo di colonnata",
-"Salame piccante",
-"Salame dolce",
-"Cotto",
-"Funghi champignon",
-"Carciofini",
-"Provola",
-"Pancetta",
-"Fiordilatte",
-"Melanzane",
-"Peperoni",
-"Zucchine",
-"Salsiccia",
-"Porcini",
-"Olive nere",
-"Nduja",
-"Mozzarella a fette",
-"Pelati",
-"Gorgonzola",
-"Parmigiano",
-"Emmental",
-"Insalata",
-"Rucola",
-"Pomodorini",
-"Pomodorini rossi semi dry",
-"Pomodorini verdi semi dry",
-"Pomodorini gialli semi dry",
-"Datterino giallo in succo",
-"Datterino rosso in succo",
-"Gamberetti",
-"Crudo",
-"Mortadella",
-"Speck",
-"Pesto di basilico",
-"Pesto di pistacchio",
-"Ricotta",
-"Pepe",
-"Origano",
-"Olio",
-"Farina 25 kg",
-"Semola rimacinata",
-"Glassa di aceto balsamico",
-"Lievito",
-"Tartufo",
-"Peperone crusco",
-"Sugo cotto",
-"Lesse",
-"Patata viola",
-"Sale",
-"Rotoloni",
-"Maionese",
-"Ketchup",
-"BBQ",
-"Cheddar",
-"Tonno",
-"Mais",
-"Alici",
-"Basilico",
-"Noci",
-"Taralli",
-"Panna",
-"Cipolla",
-"Cipolla caramellata",
-"Cartoni pizza normali",
-"Cartoni mezzo metro",
-"Legna",
-"Pellicola",
-"Pomodori secchi",
-"Panetti pizza",
-"Peperoncino in foglie",
-"Pecorino",
-"Porchetta",
-"Zucca",
-"Broccoli",
-"Fiori di zucca",
-"Capperi",
-"Caciocavallo"
+"Lardo di colonnata","Salame piccante","Salame dolce","Cotto",
+"Funghi champignon","Carciofini","Provola","Pancetta","Fiordilatte",
+"Melanzane","Peperoni","Zucchine","Salsiccia","Porcini","Olive nere",
+"Nduja","Mozzarella a fette","Pelati","Gorgonzola","Parmigiano",
+"Emmental","Insalata","Rucola","Pomodorini","Pomodorini rossi semi dry",
+"Pomodorini verdi semi dry","Pomodorini gialli semi dry",
+"Datterino giallo in succo","Datterino rosso in succo","Gamberetti",
+"Crudo","Mortadella","Speck","Pesto di basilico","Pesto di pistacchio",
+"Ricotta","Pepe","Origano","Olio","Farina 25 kg","Semola rimacinata",
+"Glassa di aceto balsamico","Lievito","Tartufo","Peperone crusco",
+"Sugo cotto","Lesse","Patata viola","Sale","Rotoloni","Maionese",
+"Ketchup","BBQ","Cheddar","Tonno","Mais","Alici","Basilico","Noci",
+"Taralli","Panna","Cipolla","Cipolla caramellata",
+"Cartoni pizza normali","Cartoni mezzo metro","Legna","Pellicola",
+"Pomodori secchi","Panetti pizza","Peperoncino in foglie","Pecorino",
+"Porchetta","Zucca","Broccoli","Fiori di zucca","Capperi","Caciocavallo"
 ],
 
 "Cucina": [
-"Impasto polpette",
-"Tagliata",
-"Patatine",
-"Patatine a barchetta",
-"Patatine twister",
-"Cotolette",
-"Petto di pollo",
-"Ghiaccio",
-"Kebab",
-"Panna",
-"Pecorino",
-"Grana",
-"Pelati",
-"Pomodorini",
-"Pesto di pistacchio",
-"Mozzarella di bufala",
-"Pepe",
-"Sale",
-"Olio",
-"Erbe aromatiche",
-"Basilico",
-"Cotto",
-"Crudo",
-"Spianata piccante",
-"Pancetta",
-"Speck",
-"Mortadella",
-"Uova",
-"Mascarpone",
-"Melanzane",
-"Zucchine",
-"Salsiccia",
-"Insalata",
-"Rucola",
-"Mais",
-"Olive",
-"Carciofi",
-"Burrate",
-"Millefoglie",
-"Savoiardi",
-"Cacao",
-"Zucchero a velo",
-"Miele",
-"Noci",
-"Formaggi taglieri",
-"No lattosio",
-"Ricotta",
-"Latte",
-"Burro",
-"Farina per la cucina",
-"Cheddar",
-"Bucatini",
-"Piselli",
-"Riso",
-"Patate",
-"Pangrattato",
-"Nutella",
-"Pistacchio crema",
-"Cioccolato bianco",
-"Caramello",
-"Amarene",
-"Zucchero pacco",
-"Olio friggitrice",
-"Carta per fritti",
-"Carta forno",
-"Carta argentata",
-"Pellicola",
-"Vaschette grandi",
-"Vaschette piccole",
-"Broccoli",
-"Zucca",
-"Cipolla",
-"Aglio",
-"Pennette",
-"Cioccolato fondente",
-"Gas"
+"Impasto polpette","Tagliata","Patatine","Patatine a barchetta",
+"Patatine twister","Cotolette","Petto di pollo","Ghiaccio","Kebab",
+"Panna","Pecorino","Grana","Pelati","Pomodorini","Pesto di pistacchio",
+"Mozzarella di bufala","Pepe","Sale","Olio","Erbe aromatiche","Basilico",
+"Cotto","Crudo","Spianata piccante","Pancetta","Speck","Mortadella",
+"Uova","Mascarpone","Melanzane","Zucchine","Salsiccia","Insalata",
+"Rucola","Mais","Olive","Carciofi","Burrate","Millefoglie","Savoiardi",
+"Cacao","Zucchero a velo","Miele","Noci","Formaggi taglieri",
+"No lattosio","Ricotta","Latte","Burro","Farina per la cucina",
+"Cheddar","Bucatini","Piselli","Riso","Patate","Pangrattato","Nutella",
+"Pistacchio crema","Cioccolato bianco","Caramello","Amarene",
+"Zucchero pacco","Olio friggitrice","Carta per fritti","Carta forno",
+"Carta argentata","Pellicola","Vaschette grandi","Vaschette piccole",
+"Broccoli","Zucca","Cipolla","Aglio","Pennette",
+"Cioccolato fondente","Gas"
 ],
 
 "Lavaggio": [
-"Candeggina",
-"Sgrassatore",
-"Ters",
-"Pezze Banchi",
-"Pezze pavimento",
-"Pezze per asciugare",
-"Buste grandi",
-"Buste piccole",
-"Svelto",
-"Detersivo lavastoviglie",
-"Brillantante"
+"Candeggina","Sgrassatore","Ters","Pezze Banchi","Pezze pavimento",
+"Pezze per asciugare","Buste grandi","Buste piccole","Svelto",
+"Detersivo lavastoviglie","Brillantante"
 ]
 };
 
-const key = "inventario-pizzeria-v1";
+const storageKey = "antony-dash-stock-v2";
+const oldStorageKey = "inventario-pizzeria-v1";
+
 let stock = {};
-
-try {
-stock = JSON.parse(localStorage.getItem(key) || "{}");
-} catch(e) {
-stock = {};
-}
-
 let current = null;
+let salaPlace = null;
 let term = "";
+
 const app = document.getElementById("app");
 
 const meta = {
-Sala: [
-"🍷",
-"Bevande, materiali e prodotti sala",
-"https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1400&q=85"
-],
-Pizzeria: [
-"🍕",
-"Ingredienti, impasti e prodotti pizza",
-"https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=1400&q=85"
-],
-Cucina: [
-"👨‍🍳",
-"Ingredienti e prodotti cucina",
-"https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1400&q=85"
-],
-Lavaggio: [
-"🧽",
-"Detergenti e materiali di pulizia",
-"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1400&q=85"
-]
+Sala:["🍷","Bevande, materiali e prodotti sala",
+"https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1400&q=85"],
+Pizzeria:["🍕","Ingredienti, impasti e prodotti pizza",
+"https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=1400&q=85"],
+Cucina:["👨‍🍳","Ingredienti e prodotti cucina",
+"https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1400&q=85"],
+Lavaggio:["🧽","Detergenti e materiali di pulizia",
+"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1400&q=85"],
+Frigo:["🧊","Bevande e prodotti disponibili nel frigo",
+"https://images.unsplash.com/photo-1571175432247-6c9b8c5c6f7a?auto=format&fit=crop&w=1400&q=85"],
+Magazzino:["📦","Scorte e prodotti da rifornire",
+"https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1400&q=85"]
 };
 
-function save(){
-localStorage.setItem(key,JSON.stringify(stock));
+/* Classificazione delle bevande della Sala */
+const liquori = [
+"Limoncello","Meloncello","Uniqum","Petrus",
+"Amaro Montenegro","Amaro Averna","Amaro della casa",
+"Jegermaister","Grappa barricata","Grappa bianca"
+];
+
+const birre = [
+"Tennen’s","Franziskaner media","Ichnusa","Bud",
+"Leffe rossa","Leffe bionda","Stella Artois da 66",
+"Nastro Azzurro da 66"
+];
+
+const softDrinkLattine = [
+"Coca-Cola","Coca-Cola Zero","Fanta","Sprite"
+];
+
+const softDrinkBottiglie = [
+"Coca-Cola da litro","Acqua naturale","Acqua frizzante"
+];
+
+const vini = [
+"Vino bianco Falanghina","Vino bianco Fiano",
+"Vino rosso Aglianico","Vino rosso Coda di Volpe"
+];
+
+function unitFor(product,place){
+  if(place === "Magazzino"){
+    if(liquori.includes(product)) return "bottiglie";
+    if(isBeverage(product)) return "casse";
+    return "unità";
+  }
+
+  if(place === "Frigo"){
+    if(softDrinkLattine.includes(product)) return "lattine";
+    if(isBeverage(product)) return "bottiglie";
+    return "unità";
+  }
+
+  return "unità";
 }
 
-function q(n){
-return Number(stock[n] || 0);
+function isBeverage(product){
+  return liquori.includes(product) ||
+         birre.includes(product) ||
+         softDrinkLattine.includes(product) ||
+         softDrinkBottiglie.includes(product) ||
+         vini.includes(product);
+}
+
+function salaKey(place,product){
+  return "Sala|" + place + "|" + product;
+}
+
+function keyFor(section,product){
+  if(section === "Sala"){
+    return salaKey(salaPlace,product);
+  }
+  return section + "|" + product;
+}
+
+/* Caricamento e migrazione delle quantità precedenti */
+try{
+  const saved = localStorage.getItem(storageKey);
+  if(saved){
+    stock = JSON.parse(saved);
+  }else{
+    const old = JSON.parse(localStorage.getItem(oldStorageKey) || "{}");
+
+    Object.keys(old).forEach(product=>{
+      if(inventory.Sala.includes(product)){
+        stock[salaKey("Frigo",product)] = Number(old[product]) || 0;
+      }else{
+        stock[product] = Number(old[product]) || 0;
+      }
+    });
+  }
+}catch(e){
+  stock = {};
+}
+
+function save(){
+  localStorage.setItem(storageKey,JSON.stringify(stock));
+}
+
+function qty(section,product){
+  return Number(stock[keyFor(section,product)] || 0);
 }
 
 function fmt(n){
-return Number(n).toLocaleString("it-IT",{
-maximumFractionDigits:3
-});
+  return Number(n).toLocaleString("it-IT",{
+    maximumFractionDigits:3
+  });
 }
 
 function home(){
-current = null;
+  current = null;
+  salaPlace = null;
 
-app.innerHTML =
-'<div class="sub">Scegli un reparto</div>' +
-'<div class="cards">' +
-Object.keys(inventory).map(n=>{
-let m = meta[n];
-
-return `
-<button class="section"
-style="--img:url('${m[2]}')"
-onclick="openSection('${n}')">
-
-<span class="sectxt">
-<span class="emoji">${m[0]}</span>
-<span class="sectname">${n.toUpperCase()}</span>
-<span class="desc">${m[1]}</span>
-</span>
-
-<span class="arrow">›</span>
-</button>
-`;
-}).join("") +
-'</div><footer>Inventario • Pizzeria da Antony</footer>';
+  app.innerHTML =
+  '<div class="sub">Scegli un reparto</div>' +
+  '<div class="cards">' +
+  Object.keys(inventory).map(n=>{
+    const m = meta[n];
+    return `
+    <button class="section" style="--img:url('${m[2]}')" onclick="openSection('${n}')">
+      <span class="sectxt">
+        <span class="emoji">${m[0]}</span>
+        <span class="sectname">${n.toUpperCase()}</span>
+        <span class="desc">${m[1]}</span>
+      </span>
+      <span class="arrow">›</span>
+    </button>`;
+  }).join("") +
+  '</div><footer>Inventario • Pizzeria da Antony</footer>';
 }
 
 function openSection(n){
-current = n;
-term = "";
-section();
+  current = n;
+  term = "";
+
+  if(n === "Sala"){
+    salaMenu();
+  }else{
+    section();
+  }
+}
+
+function salaMenu(){
+  current = "Sala";
+  salaPlace = null;
+
+  app.innerHTML = `
+  <button class="back" onclick="home()">‹ Tutte le sezioni</button>
+  <div class="sub">Sala • Scegli la posizione</div>
+  <div class="cards">
+    <button class="section" style="--img:url('${meta.Frigo[2]}')" onclick="openSalaPlace('Frigo')">
+      <span class="sectxt">
+        <span class="emoji">🧊</span>
+        <span class="sectname">FRIGO</span>
+        <span class="desc">Bevande e prodotti nel frigorifero</span>
+      </span>
+      <span class="arrow">›</span>
+    </button>
+
+    <button class="section" style="--img:url('${meta.Magazzino[2]}')" onclick="openSalaPlace('Magazzino')">
+      <span class="sectxt">
+        <span class="emoji">📦</span>
+        <span class="sectname">MAGAZZINO</span>
+        <span class="desc">Scorte e prodotti da rifornire</span>
+      </span>
+      <span class="arrow">›</span>
+    </button>
+  </div>
+  <footer>Sala • Pizzeria da Antony</footer>`;
+}
+
+function openSalaPlace(place){
+  salaPlace = place;
+  term = "";
+  section();
 }
 
 function section(){
-let m = meta[current];
+  const m = current === "Sala" ? meta[salaPlace] : meta[current];
+  const items = inventory[current].filter(x =>
+    x.toLowerCase().includes(term.toLowerCase())
+  );
 
-let items = inventory[current].filter(x =>
-x.toLowerCase().includes(term.toLowerCase())
-);
+  const total = inventory[current].reduce((a,x)=>a+qty(current,x),0);
 
-let total = inventory[current].reduce((a,x)=>a+q(x),0);
+  app.innerHTML = `
+  <button class="back" onclick="${current === "Sala" ? "salaMenu()" : "home()"}">
+    ‹ ${current === "Sala" ? "Frigo e Magazzino" : "Tutte le sezioni"}
+  </button>
 
-app.innerHTML = `
-<button class="back" onclick="home()">‹ Tutte le sezioni</button>
+  <div class="heading">
+    <span class="emoji">${m[0]}</span>
+    <div>
+      <h2>${current === "Sala" ? salaPlace : current}</h2>
+      <p>${m[1]}</p>
+    </div>
+  </div>
 
-<div class="heading">
-<span class="emoji">${m[0]}</span>
-<div>
-<h2>${current}</h2>
-<p>${m[1]}</p>
-</div>
-</div>
+  <div class="tools">
+    <input id="search" placeholder="Cerca prodotto..." value="${esc(term)}" oninput="searchUpdate(this.value)">
+    <button class="btn danger" onclick="resetSection()">Azzera</button>
+  </div>
 
-<div class="tools">
-<input id="search"
-placeholder="Cerca prodotto..."
-value="${esc(term)}"
-oninput="term=this.value;sectionKeep(this.value)">
+  <div class="stats">
+    <span>${items.length} prodotti</span>
+    <span>Totale quantità: ${fmt(total)}</span>
+  </div>
 
-<button class="btn danger" onclick="resetSection()">Azzera</button>
-</div>
+  <div class="list">
+    ${items.length ? items.map(item=>product(item)).join("") :
+      '<div class="empty">Nessun prodotto trovato</div>'}
+  </div>
 
-<div class="stats">
-<span>${items.length} prodotti</span>
-<span>Totale quantità: ${fmt(total)}</span>
-</div>
-
-<div class="list">
-${items.length
-? items.map(item=>product(item)).join("")
-: '<div class="empty">Nessun prodotto trovato</div>'}
-</div>
-
-<footer>Quantità salvate automaticamente su questo dispositivo.</footer>
-`;
+  <footer>Quantità salvate automaticamente su questo dispositivo.</footer>`;
 }
 
-function sectionKeep(){
-let el = document.getElementById("search");
-let p = el.selectionStart;
+function searchUpdate(value){
+  term = value;
+  section();
 
-section();
-
-el = document.getElementById("search");
-el.focus();
-el.setSelectionRange(p,p);
+  const el = document.getElementById("search");
+  if(el){
+    el.focus();
+    el.setSelectionRange(el.value.length,el.value.length);
+  }
 }
 
 function product(n){
-return `
-<div class="product">
-<div class="name">${esc(n)}</div>
+  const unit = unitFor(n,current === "Sala" ? salaPlace : current);
 
-<button class="step" onclick="change('${js(n)}',-1)">−</button>
-
-<div class="qty" onclick="edit('${js(n)}')">
-${fmt(q(n))}
-</div>
-
-<button class="step plus" onclick="change('${js(n)}',1)">+</button>
-</div>
-`;
+  return `
+  <div class="product">
+    <div class="name">${esc(n)}</div>
+    <button class="step" onclick="change('${js(n)}',-1)">−</button>
+    <div class="qty" onclick="edit('${js(n)}')">${fmt(qty(current,n))}</div>
+    <button class="step plus" onclick="change('${js(n)}',1)">+</button>
+    <span class="unit">${unit}</span>
+  </div>`;
 }
 
 function change(n,d){
-let v = Math.max(0,q(n)+d);
+  let v = Math.max(0,qty(current,n)+d);
 
-if(n === "Panetti pizza"){
-v = Math.min(300,v);
-}
+  if(n === "Panetti pizza"){
+    v = Math.min(300,v);
+  }
 
-stock[n] = v;
-save();
-section();
+  stock[keyFor(current,n)] = v;
+  save();
+  section();
 }
 
 function edit(n){
-let bg = document.createElement("div");
-bg.className = "modalbg";
+  const unit = unitFor(n,current === "Sala" ? salaPlace : current);
+  const bg = document.createElement("div");
+  bg.className = "modalbg";
 
-bg.innerHTML = `
-<div class="modal">
-<h3>${esc(n)}</h3>
-<p>Inserisci la quantità attuale</p>
+  bg.innerHTML = `
+  <div class="modal">
+    <h3>${esc(n)}</h3>
+    <p>Inserisci la quantità attuale (${unit})</p>
+    <input id="qty" inputmode="decimal" type="text" value="${fmt(qty(current,n))}" placeholder="0">
+    <div class="actions">
+      <button class="btn" id="cancel">Annulla</button>
+      <button class="btn" id="ok">Salva</button>
+    </div>
+  </div>`;
 
-<input id="qty"
-inputmode="decimal"
-type="text"
-value="${fmt(q(n))}"
-placeholder="0,0">
+  document.body.appendChild(bg);
 
-<div class="actions">
-<button class="btn" id="cancel">Annulla</button>
-<button class="btn" id="ok">Salva</button>
-</div>
-</div>
-`;
+  const input = bg.querySelector("#qty");
+  input.focus();
+  input.select();
 
-document.body.appendChild(bg);
+  const close = ()=>bg.remove();
 
-let input = bg.querySelector("#qty");
-input.focus();
-input.select();
+  bg.querySelector("#cancel").onclick = close;
+  bg.onclick = e=>{if(e.target === bg)close();};
 
-let close = ()=>bg.remove();
+  function submit(){
+    const raw = input.value.trim().replace(",",".");
+    let v = Number(raw);
 
-bg.querySelector("#cancel").onclick = close;
+    if(!raw || !Number.isFinite(v) || v < 0){
+      input.focus();
+      return;
+    }
 
-bg.onclick = e=>{
-if(e.target === bg) close();
-};
+    if(n === "Panetti pizza") v = Math.min(300,v);
 
-function submit(){
-let raw = input.value.trim().replace(",",".");
-let v = Number(raw);
+    stock[keyFor(current,n)] = v;
+    save();
+    close();
+    section();
+  }
 
-if(!raw || !Number.isFinite(v) || v < 0){
-input.focus();
-return;
-}
-
-v = Math.min(n === "Panetti pizza" ? 300 : 999999,v);
-
-stock[n] = v;
-save();
-close();
-section();
-}
-
-bg.querySelector("#ok").onclick = submit;
-
-input.onkeydown = e=>{
-if(e.key === "Enter") submit();
-if(e.key === "Escape") close();
-};
+  bg.querySelector("#ok").onclick = submit;
+  input.onkeydown = e=>{
+    if(e.key === "Enter")submit();
+    if(e.key === "Escape")close();
+  };
 }
 
 function resetSection(){
-if(!confirm("Vuoi azzerare tutte le quantità della sezione "+current+"?"))return;
+  const name = current === "Sala" ? salaPlace : current;
 
-inventory[current].forEach(n=>stock[n]=0);
-save();
-section();
+  if(!confirm("Vuoi azzerare tutte le quantità di "+name+"?"))return;
+
+  inventory[current].forEach(n=>{
+    stock[keyFor(current,n)] = 0;
+  });
+
+  save();
+  section();
 }
 
 function esc(s){
-return String(s).replace(/[&<>"']/g,c=>({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#39;"
-}[c]));
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
 }
 
 function js(s){
-return String(s).replaceAll("\\","\\\\").replaceAll("'","\\'");
+  return String(s).replaceAll("\\","\\\\").replaceAll("'","\\'");
 }
 
 home();
